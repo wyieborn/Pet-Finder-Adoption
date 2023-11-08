@@ -54,7 +54,6 @@ def get_image_features(img,id='pet_id'):
     arr = y.data.numpy()
     features = {}
     features[id] = arr
-    train_feats = pd.DataFrame()
     train_feats = pd.DataFrame.from_dict(features, orient='index')
     train_feats.columns = [f'pic_{i}' for i in range(train_feats.shape[1])]
     return train_feats
