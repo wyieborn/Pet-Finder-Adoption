@@ -8,11 +8,11 @@ import torch
 def image_resize():
     pass
 
-def get_image_features(img=torch.rand((1,3,256,256))):
+def process_image_features(img=torch.rand((1,3,256,256))):
     img_feat = image_feature.get_image_features(img)
     return img_feat
 
-def get_text_features(text):
+def process_text_features(text):
     pass
 
 def get_new_features(df):
@@ -49,7 +49,7 @@ def data_encoding(df):
     return preprocessor
 
 def process(df, img):
-    # img_feat = get_image_features()
+    # img_feat = process_image_features(img)
     feat_ = get_new_features(df)
     
     #combine and return
