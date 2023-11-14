@@ -34,29 +34,37 @@ def run_rf(X, y, grid_cv, model_save_path):
     Xtrain, Xtest, ytrain, ytest = train_test_split(X, y, test_size=0.25, random_state=0)
 
     
-    if not model_save_path:
-        model_save_path='{}/random_forest_model.joblib'.format(model_path) # add versioning here
-    model_exist = os.listdir(model_path)
-    if grid_cv:
-        if not model_exist:
-            print("Grid Search CV Started. Calculating Best Params-------------------------\n")
-            grid = compute_gscv(X, y)
-            print("Grid Search CV completed-----------------------------------\n")
-            # Saving the best model to a file
-            joblib.dump(grid.best_estimator_, model_save_path)
-            print(f"Best Random Forest model saved to {model_save_path}")
-            model = grid.best_estimator_
-
-        else:
-            print('Found a model\n')
-            # Loading the pre-trained model from file
-            model = joblib.load(model_save_path)
-            print(f"Random Forest model loaded from {model_save_path}")
+    try:
+        if not os.path.exists(model_path):
+            os.makedirs(model_path)
+            print('{} directory created'.format(model_path))
+        
+        
             
-            
-    eval_rf(model, Xtrain, Xtest, ytrain, ytest)
-    return model
+        if not model_save_path:
+            model_save_path='{}/random_forest_model.joblib'.format(model_path) # add versioning here
+                
+        if grid_cv:
+            if not os.path.exists(model_save_path):
+                print("Grid Search CV Started. Calculating Best Params-------------------------\n")
+                grid = compute_gscv(X, y)
+                print("Grid Search CV completed-----------------------------------\n")
+                # Saving the best model to a file
+                joblib.dump(grid.best_estimator_, model_save_path)
+                print(f"Best Random Forest model saved to {model_save_path}")
+                model = grid.best_estimator_
 
+            else:
+                print('Found a model\n')
+                # Loading the pre-trained model from file
+                model = joblib.load(model_save_path)
+                print(f"Random Forest model loaded from {model_save_path}")
+                
+                
+        eval_rf(model, Xtrain, Xtest, ytrain, ytest)
+        return model
+    except Exception as e:
+        print('Exception :',e)
    
    
 def eval_rf(model, Xtrain, Xtest, ytrain, ytest):
