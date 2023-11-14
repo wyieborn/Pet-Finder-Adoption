@@ -1,13 +1,15 @@
 
 from Preprocess import processdata
 from Services import service
+from Configuration import config
+from Src import train
 
-data_dir = 'data'
-
-
+train_dir = config.TRAIN_DIR
+image_dir = config.TRAIN_IMAGE_DIR
 
 if __name__ == '__main__':
     
-    numerical, categorical, img, text   = service.load_data(data_dir)
-    final_dataframe = processdata.process(numerical, categorical,img, text)
-    print(final_dataframe)
+    df   = service.load_data(train_dir)
+    final_dataframe = processdata.process(df, image_dir)
+    
+    train.train_rf(final_dataframe)
