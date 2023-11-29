@@ -12,7 +12,7 @@
      - To train the model while computing image features; use "python start.py()" after configuring above path as it takes too long and there is a session timeout between apps.
      - To view confusion matrix and performance, set DEBUG = TRUE
     
-2. Install required python packages using "pip install -r requirments.txt" after navigating to its folder( virtual environment recommended ).
+2. Install required python packages using "pip install -r requirements.txt" after navigating to its folder( virtual environment recommended ).
 3. Initiate Flask api using "python app.py" to serve the streamlit application.
 4. Run streamlit application using "streamlit run streamlit_app.py".
 5. If any error drop a message.
