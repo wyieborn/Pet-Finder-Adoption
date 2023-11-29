@@ -13,5 +13,6 @@
 5. If any error drop a message.
 
 Additional Info :
-     - To train the model while computing image features; use "python start.py()" after configuring above path as it takes too long and there is a session timeout between apps.
-     - To view confusion matrix and performance, set DEBUG = TRUE
+  - To train the model while computing image features; use "python start.py()" after configuring above path as it takes too long and there is a session timeout between apps.
+  - To view confusion matrix and performance, set DEBUG = TRUE
+     
