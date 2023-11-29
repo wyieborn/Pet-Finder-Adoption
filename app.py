@@ -23,7 +23,10 @@ def load_model():
         print('Loading saved model from cache.....')
         model = joblib.load(path) 
         print('Loading successfull.....') 
+<<<<<<< HEAD
         return model
+=======
+>>>>>>> 8bc949e6ac3eff69a1d451a718948b0774f58406
     else:
         print('Training Started.........')
         model = start.train_model()
