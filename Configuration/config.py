@@ -1,7 +1,6 @@
 
 DEBUG = False
 
-ROOT_DIR = 'data'
 TRAIN_DIR = 'data/train/train.csv'
 TRAIN_IMAGE_DIR = 'data/train_images'
 TRAIN_METADATA = 'data/train_metadata'
