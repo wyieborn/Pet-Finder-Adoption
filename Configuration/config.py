@@ -12,6 +12,8 @@ STATE_LABELS = 'data/state_labels.csv'
 MODEL_PATH = 'Models'
 MODEL_NAME = 'random_forest_model_v2.joblib'
 
+IMG_FEAT2 = 'image_features.csv'
+
 # DENSENET CONFIG HERE
 TRAIN_BATCH_SIZE = 16
 VALID_BATCH_SIZE = 8
@@ -72,4 +74,3 @@ INPUT_MODEL = {
     'PhotoAmt' : float
     }
 
-IMG_FEAT2 = 'image_features2.csv'

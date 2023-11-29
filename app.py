@@ -27,9 +27,7 @@ def load_model():
         print('Training Started.........')
         model = start.train_model()
         print('Training Completed..........')
-    if model is None: # only caches after first call; serving after first call through recursion
-        return load_model()
-    return model
+        return model
 
 def prepare_features(request):
     # Check if the POST request has the 'image' file or 'data' fields
