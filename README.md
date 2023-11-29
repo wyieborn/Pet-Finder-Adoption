@@ -8,7 +8,7 @@
    - model path and name( optional- required when using your own model).
      
      Optional :
-     - To train the model while computing image features; use start.py() after configuring above path as it takes too long and there is a session timeout between apps.
+     - To train the model while computing image features; use "python start.py()" after configuring above path as it takes too long and there is a session timeout between apps.
      - To view confusion matrix and performance, set DEBUG = TRUE
     
       
