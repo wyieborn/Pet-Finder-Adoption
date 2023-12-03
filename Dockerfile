@@ -8,7 +8,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 RUN apt-get update
 
 # install dependencies
-RUN pip install --upgrade pip
+RUN pip install --upgrade pip=23.1.2
 COPY ./requirements.txt /app/
 RUN pip install -r requirements.txt
 
