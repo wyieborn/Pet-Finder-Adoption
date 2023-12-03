@@ -86,6 +86,10 @@ def predict():
                         })
     except Exception as e:
         return jsonify({'error': str(e)})
+    
+@app.route('/')
+def test_api():
+    return 'Welcome to PetFinder Api V1.0.0'
 
 if __name__ == '__main__':
     app.run()
