@@ -17,12 +17,18 @@ def get_user_input(fields):
     for idx, (field, options) in enumerate(fields.items()):
         field_type = options["type"]
         required = options["required"]
+        default_value = options.get("default_value")   
 
         if field_type == "file":
             user_data[field] = st.file_uploader(
                 f"Choose {field.lower()}", type=["jpg", "jpeg", "png"]
             )
         elif field_type in ["text", "number"]:
+            default= (
+                default_value is default_value if not None 
+                else("0" if field_type=="number" else "")
+                     ) 
+             
             user_data[field] = (
                 columns[idx % num_columns].text_input(
                     f"Enter {field}{'*' if required else ''}", ""
@@ -47,9 +53,9 @@ def process_data(user_data, fields):
             user_data[field] = 1 if user_data.get(field) == "Male" else 2
         else:
             user_data[field] = 1 if user_data.get(field) == "Yes" else 0
-
     # Mapping for Color
     color_mapping = {
+        "None":0,  
         "Red": 1,
         "Blue": 2,
         "Green": 3,
@@ -67,12 +73,12 @@ def process_data(user_data, fields):
     user_data["Color2"] = color_mapping.get(user_data.get("Color2"))
     user_data["Color3"] = color_mapping.get(user_data.get("Color3"))
 
-    # Mapping for State
-    state_mapping = {"State A": 1, "State B": 2, "State C": 3, "State D": 4}
+    # Mapping for State  
+    state_mapping = {"None":0,"State A": 1, "State B": 2, "State C": 3, "State D": 4}
     user_data["State"] = state_mapping.get(user_data.get("State"))
 
-    # Mapping for Health
-    health_mapping = {"Healthy": 1, "Minor Injury": 2, "Serious Injury": 3}
+    # Mapping for Health 
+    health_mapping = {"None":0,"Healthy": 1, "Minor Injury": 2, "Serious Injury": 3}
     user_data["Health"] = health_mapping.get(user_data.get("Health"))
 
     required_fields = [
@@ -119,21 +125,21 @@ def main():
             "options": ["Male", "Female"],
             "required": True,
         },
-        "Breed1": {"type": "text", "required": False},
-        "Breed2": {"type": "text", "required": False},
-        "Color1": {
+        "Breed1": {"type": "text", "required": False, "default_value":-1},
+        "Breed2": {"type": "text", "required": False, "default_value":-1},
+        "Color1": { 
             "type": "selectbox",
-            "options": ["Red", "Blue", "Green", "Yellow"],
+            "options": ["None","Red", "Blue", "Green", "Yellow"],
             "required": True,
         },
-        "Color2": {
+        "Color2": { 
             "type": "selectbox",
-            "options": ["White", "Black", "Brown", "Orange"],
+            "options": ["None","White", "Black", "Brown", "Orange"],
             "required": True,
         },
         "Color3": {
             "type": "selectbox",
-            "options": ["Gray", "Purple", "Pink", "Gold"],
+            "options": ["None","Gray", "Purple", "Pink", "Gold"],
             "required": True,
         },
         "MaturitySize": {"type": "number", "required": True},
