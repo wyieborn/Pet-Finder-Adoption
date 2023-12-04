@@ -68,7 +68,7 @@ def show_image_click_game():
     with col1:
         img1 = "cat2.jpg"  # Replace this with the actual image path or URL
         st.image(img1, use_column_width=True, output_format="JPEG")
-        st.write(f"Type: Dog")
+        st.write(f"Type: Cat")
         st.write(f"Age: 1.5 years")
         st.write(f"Health: Healthy")
         if st.button("Pet 1"):
@@ -112,10 +112,10 @@ def get_user_input(fields):
         default_value = options.get("default_value")
 
         if field_type == "file":
-            user_data[field] = st.file_uploader(
+            uploaded_file = st.file_uploader(
                 f"Choose {field.lower()}", type=["jpg", "jpeg", "png"]
             )
-            if user_data[field] is not None:
+            if uploaded_file is not None:
                 num_files_uploaded += 1
         elif field_type in ["text", "number"]:
             user_data[field] = (
