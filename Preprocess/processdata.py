@@ -82,26 +82,39 @@ def process_train(df):
     
     img_df = image_feature2.extract_train_feat()
     img_df['PetID'] = img_df['PetID'].apply(lambda x : x.split('-')[0])
-
+    
+    img_features = image_feature.process_image_train()
+    
     df = get_new_features(df)
     
     #combine and return
     merged_df = pd.merge(df, img_df, how="inner", on=["PetID"], copy=True)
+    merged_df = merged_df.merge(img_features, how='left', on='PetID')
     cols_to_drop = ['PetID', 'Description', 'Name','RescuerID', 'AgeScaled']
     merged_df = merged_df.drop(cols_to_drop, axis = 1)
+    
+    
+    
     # merged_df = df
     merged_df = merged_df.fillna(0)
-    
-    
+    print(merged_df.head())
     return merged_df
 
 def process(df, img):
 
     if img is not None:
-        img_df = image_feature2.extract_image_features(img)
+        img_array = np.array(img)
+        img_df = image_feature2.extract_image_features(img_array)
+        
+        img_nn = image_feature.process_image(img)
+        nn_df = pd.DataFrame(img_nn)
+
+        img_df = pd.concat([img_df, nn_df], axis=1)
+        print(img_df)
 
     else:
         img_df = None
+        
     df = get_new_features(df)
     
     #combine and return

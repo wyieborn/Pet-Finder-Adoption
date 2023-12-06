@@ -9,9 +9,10 @@ COLOR_LABELS_DIR = 'data/color_labels.csv'
 STATE_LABELS = 'data/state_labels.csv'
 
 MODEL_PATH = 'Models'
-MODEL_NAME = 'random_forest_model_v2.joblib'
+MODEL_NAME = 'random_forest_model_v3.joblib'
 
 IMG_FEAT2 = 'image_features.csv'
+IMG_FEAT = 'img_features_densenet121.csv'
 
 # DENSENET CONFIG HERE
 TRAIN_BATCH_SIZE = 16
