@@ -178,7 +178,7 @@ def process_data(user_data, fields):
     }
     user_data["Health"] = health_mapping.get(user_data.get("Health"))
 
-    type_mapping = {"Cat": 2, "Dog": 1}
+    type_mapping = {"2-Cat": 2, "1-Dog": 1}
     
     user_data["Type"] = type_mapping.get(user_data.get("Type"))
 
