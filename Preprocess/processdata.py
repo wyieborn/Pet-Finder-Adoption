@@ -6,6 +6,7 @@ from sklearn.compose import ColumnTransformer
 import torch
 from textblob import TextBlob
 import numpy as np
+np.seterr(divide='ignore', invalid='ignore')
 
 def image_resize():
     pass
@@ -110,7 +111,6 @@ def process(df, img):
         nn_df = pd.DataFrame(img_nn)
 
         img_df = pd.concat([img_df, nn_df], axis=1)
-        print(img_df)
 
     else:
         img_df = None
@@ -126,5 +126,5 @@ def process(df, img):
     merged_df = merged_df.drop(cols_to_drop, axis = 1)
     merged_df = merged_df.fillna(0)
     
-    
+    print(merged_df)
     return merged_df

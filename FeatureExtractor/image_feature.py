@@ -63,10 +63,23 @@ def get_image_features(img):
 
 # function to process a single image and return its features
 def process_image(image):
+    features = {}
     input_tensor = transformer(image)
     input_batch = input_tensor.unsqueeze(0)
-    features = get_image_features(input_batch)
-    return features
+    
+    feature = get_image_features(input_batch)
+    
+    
+    train_feats = pd.DataFrame([feature], columns=[f'pic_{i}' for i in range(len(feature))])
+    features = train_feats[[f'pic_{i}' for i in range(256)]].values
+    # SVD reduction
+    n_components = 32
+    svd_ = TruncatedSVD(n_components=n_components, random_state=555)
+    svd_col = svd_.fit_transform(features)
+    svd_col = pd.DataFrame(svd_col)
+    svd_col = svd_col.add_prefix('IMG_SVD_')
+    return svd_col
+
    
 def process_train(pet_id):
     
@@ -77,6 +90,7 @@ def process_train(pet_id):
         input_batch = input_tensor.unsqueeze(0)
         features = get_image_features(input_batch)
         return pet_id, features
+    
     
 def process_image_train():
     try:

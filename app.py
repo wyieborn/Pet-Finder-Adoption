@@ -46,17 +46,17 @@ def prepare_features(request):
         # # Reading the image file and extracting features
         # img = cv2.imdecode(np.frombuffer(image_file.read(), np.uint8), cv2.IMREAD_COLOR)
         img = Image.open(image_file)
-        img_array = np.array(img)
+        # img_array = np.array(img)
         # get image features here
         # df_image = get_image_features(img_array)
     else:
-        img_array = None
+        img = None
     
 
     df = service.map_request_input(request.form, config.INPUT_MODEL)
 
     # process df
-    df = processdata.process(df, img_array)
+    df = processdata.process(df, img)
 
     return df
     
@@ -69,7 +69,6 @@ def predict():
         # data = request.get_json()
         # for query parameter
         # data = request.args.get('data')    
-
 
         # # Load the machine learning model
         model = load_model()
