@@ -58,23 +58,24 @@ def show_image_click_game():
     # Get adoptability predictions for Pet 1 and Pet 2 from the provided pet data list
     response_1 = requests.post("http://localhost:5000/predict", data=pet_data[0])
     response_2 = requests.post("http://localhost:5000/predict", data=pet_data[1])
+
     pet_1_prediction = int(
         response_1.json().get("predictions") if response_1.status_code == 200 else None
     )
     pet_2_prediction = int(
         response_2.json().get("predictions") if response_2.status_code == 200 else None
     )
-
     with col1:
         img1 = "cat2.jpg"  # Replace this with the actual image path or URL
         st.image(img1, use_column_width=True, output_format="JPEG")
-        st.write(f"Type: Cat")
-        st.write(f"Age: 1.5 years")
-        st.write(f"Health: Healthy")
+        # st.write(f"Type: Cat")
+        # st.write(f"Age: 1.5 years")
+        # st.write(f"Health: Healthy")
+
         if st.button("Pet 1"):
             # Display the result based on the comparison of predictions
             if pet_1_prediction is not None and pet_2_prediction is not None:
-                if pet_1_prediction > pet_2_prediction:
+                if pet_1_prediction < pet_2_prediction:
                     st.success("Correct! Pet 1 is more likely to get adopted.")
                 else:
                     st.error("Oops! Pet 1 might not be as likely to get adopted.")
@@ -82,12 +83,12 @@ def show_image_click_game():
     with col2:
         img2 = "cat1.jpg"
         st.image(img2, use_column_width=True, output_format="JPEG")
-        st.write(f"Type: Cat")
-        st.write(f"Age: 7 years")
-        st.write(f"Health: Not Healthy")
+        # st.write(f"Type: Cat")
+        # st.write(f"Age: 2 years")
+        # st.write(f"Health: Not Healthy")
         if st.button("Pet 2"):
             if pet_1_prediction is not None and pet_2_prediction is not None:
-                if pet_2_prediction > pet_1_prediction:
+                if pet_2_prediction < pet_1_prediction:
                     st.success("Correct! Pet 2 is more likely to get adopted.")
                 else:
                     st.error("Oops! Pet 2 might not be as likely to get adopted.")
@@ -117,6 +118,7 @@ def get_user_input(fields):
             )
             if uploaded_file is not None:
                 num_files_uploaded += 1
+                user_data[field] = uploaded_file
         elif field_type in ["text", "number"]:
             user_data[field] = (
                 columns[idx % num_columns].text_input(
@@ -143,24 +145,26 @@ def process_data(user_data, fields):
         if field == "Gender":
             user_data[field] = 1 if user_data.get(field) == "Male" else 2
         else:
-            user_data[field] = 1 if user_data.get(field) == "Yes" else 0
+            field_value = user_data.get(field)
+            if field_value == "Yes":
+                user_data[field] = 1
+            elif field_value == "No":
+                user_data[field] = 2
+            elif field_value == "Not Sure":
+                user_data[field] = 3
 
     # Mapping for Color
     color_mapping = {
         "None": 0,
-        "Red": 1,
-        "Blue": 2,
-        "Green": 3,
+        "Black": 1,
+        "Brown": 2,
+        "Golden": 3,
         "Yellow": 4,
-        "White": 5,
-        "Black": 6,
-        "Brown": 7,
-        "Orange": 8,
-        "Gray": 9,
-        "Purple": 10,
-        "Pink": 11,
-        "Gold": 12,
+        "Cream": 5,
+        "Gray": 6,
+        "White": 7,
     }
+
     user_data["Color1"] = color_mapping.get(user_data.get("Color1"))
     user_data["Color2"] = color_mapping.get(user_data.get("Color2"))
     user_data["Color3"] = color_mapping.get(user_data.get("Color3"))
@@ -174,6 +178,9 @@ def process_data(user_data, fields):
     }
     user_data["Health"] = health_mapping.get(user_data.get("Health"))
 
+    type_mapping = {"Cat": 2, "Dog": 1}
+    user_data["Type"] = type_mapping.get(user_data.get("Type"))
+
     # Mapping for MaturitySize
     maturity_mapping = {
         "Not Specified": 0,
@@ -185,7 +192,7 @@ def process_data(user_data, fields):
     user_data["MaturitySize"] = maturity_mapping.get(user_data.get("MaturitySize"))
 
     # Mapping for FurLength
-    fur_mapping = {"Not Specified": 0, "Small": 1, "Medium": 2, "Long": 3}
+    fur_mapping = {"Not Specified": 0, "Short": 1, "Medium": 2, "Long": 3}
     user_data["FurLength"] = fur_mapping.get(user_data.get("FurLength"))
 
     required_fields = [
@@ -229,7 +236,7 @@ def show_home_page():
 
     fields = {
         "Image": {"type": "file", "required": False},
-        "Type": {"type": "text", "required": True},
+        "Type": {"type": "selectbox", "options": ["1-Dog", "2-Cat"], "required": True},
         "Name": {"type": "text", "required": True},
         "Age": {"type": "number", "required": True},
         "Gender": {
@@ -237,21 +244,48 @@ def show_home_page():
             "options": ["Male", "Female"],
             "required": True,
         },
-        "Breed1": {"type": "number", "required": False, "default_value": -1},
-        "Breed2": {"type": "number", "required": False, "default_value": -1},
+        "Breed1": {"type": "number", "required": False, "default_value": 0},
+        "Breed2": {"type": "number", "required": False, "default_value": 0},
         "Color1": {
             "type": "selectbox",
-            "options": ["None", "Red", "Blue", "Green", "Yellow"],
+            "options": [
+                "None",
+                "Black",
+                "Brown",
+                "Golden",
+                "Yellow",
+                "Cream",
+                "Gray",
+                "White",
+            ],
             "required": True,
         },
         "Color2": {
             "type": "selectbox",
-            "options": ["None", "White", "Black", "Brown", "Orange"],
+            "options": [
+                "None",
+                "Black",
+                "Brown",
+                "Golden",
+                "Yellow",
+                "Cream",
+                "Gray",
+                "White",
+            ],
             "required": True,
         },
         "Color3": {
             "type": "selectbox",
-            "options": ["None", "Gray", "Purple", "Pink", "Gold"],
+            "options": [
+                "None",
+                "Black",
+                "Brown",
+                "Golden",
+                "Yellow",
+                "Cream",
+                "Gray",
+                "White",
+            ],
             "required": True,
         },
         "MaturitySize": {
@@ -264,9 +298,21 @@ def show_home_page():
             "options": ["Not Specified", "Short", "Medium", "Long"],
             "required": True,
         },
-        "Vaccinated": {"type": "selectbox", "options": ["Yes", "No"], "required": True},
-        "Dewormed": {"type": "selectbox", "options": ["Yes", "No"], "required": True},
-        "Sterilized": {"type": "selectbox", "options": ["Yes", "No"], "required": True},
+        "Vaccinated": {
+            "type": "selectbox",
+            "options": ["Not Sure", "Yes", "No"],
+            "required": True,
+        },
+        "Dewormed": {
+            "type": "selectbox",
+            "options": ["Not Sure", "Yes", "No"],
+            "required": True,
+        },
+        "Sterilized": {
+            "type": "selectbox",
+            "options": ["Not Sure", "Yes", "No"],
+            "required": True,
+        },
         "Health": {
             "type": "selectbox",
             "options": ["Not Specified", "Healthy", "Minor Injury", "Serious Injury"],
@@ -278,9 +324,10 @@ def show_home_page():
     }
 
     user_data = get_user_input(fields)
-    if st.button("Process Data"):
+    if st.button("Predict"):
         required_fields = process_data(user_data, fields)
 
+        # st.title(user_data)
         display_required_fields_warnings(required_fields)
         if not required_fields:
             with st.spinner("Processing data..."):
@@ -288,13 +335,17 @@ def show_home_page():
                     "http://localhost:5000/predict", data=user_data
                 )
                 if response.status_code == 200:
+                    # st.title(response.text)
                     prediction = int(response.json().get("predictions"))
                     if prediction == 0:
-                        st.error("The pet doesn't have a good adoptability.")
+                        st.success("This pet has the highest chance of being adopted.")
+                    elif 1 <= prediction <= 3:
+                        st.warning("This pet has a good chance of being adopted.")
+                    elif prediction == 4:
+                        st.error("This pet has a low chance of being adopted.")
                         st.write(
                             "Please contact the following organizations for ensuring a safe home for this pet."
                         )
-
                         contact_info = [
                             ["Organization", "Contact Number", "Email Address"],
                             [
@@ -324,10 +375,6 @@ def show_home_page():
                             ],
                         ]
                         st.table(contact_info)
-                    elif prediction >= 1 and prediction <= 2:
-                        st.warning("The pet's adoption possibility is moderate.")
-                    elif prediction >= 3 and prediction <= 4:
-                        st.success("This pet has a better adoption possibility.")
                     else:
                         st.warning("Prediction value out of range.")
 
